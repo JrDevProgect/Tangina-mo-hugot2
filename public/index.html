@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Hugot API Documentation">
+    <meta property="og:image" content="hugot.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="hugot.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="hugot.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="hugot.png">
+    <link rel="mask-icon" href="hugot.png" color="#4f46e5">
+    <meta name="msapplication-TileColor" content="#4f46e5">
+    <meta name="theme-color" content="#ffffff">
+    <title>Hugot API Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600&display=swap"
+rel="stylesheet">
+    <link rel="stylesheet"
+href="style.css">
+</head>
+<body>
+    <div class="gradient-bg"></div>
+    <nav>
+        <div class="nav-container">
+            <h1>Hugot API <span class="badge">v1.0</span></h1>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <section class="fade-in">
+                <h2><span class="accent">#</span> Introduction</h2>
+                <div class="card glass">
+                    <p>A simple API that returns random hugot lines for those moments when words can't express your feelings. 💭</p>
+                </div>
+            </section>
+
+            <section class="slide-in">
+                <h2><span class="accent">#</span> Endpoints</h2>
+                <div class="endpoint-card glass">
+                    <div class="endpoint-header">
+                        <span class="method">GET</span>
+            <code>/api/hugot</code>  
+                    </div>
+                    <p>Returns a random hugot line that hits right in the feels.</p>
+                    
+                    <div class="response-format">
+                        <h4>Response Format:</h4>
+                        <pre class="code-block">
+{
+    "success": true,
+    "hugot": "Sample hugot line here"
+}</pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="fade-in">
+                <h2><span class="accent">#</span> Try It Out</h2>
+                <div class="test-api-card glass">
+                    <button id="testApi" class="btn-test">Get Random Hugot</button>
+                    <div id="result" class="result hidden">
+                        <h4>Response:</h4>
+                        <div class="response-content">
+                            <p id="hugotLine"></p>
+                            <button class="btn-copy" onclick="copyToClipboard()">
+                                <span class="tooltip">Copy</span>
+                                📋
+                            </button>
+                        </div>
+                    </div>
+                    <div id="loading" class="loading hidden">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="glass">
+        <p>Made with <span class="heart">❤️</span> by <a href="https://www.facebook.com/jr.busaco.271915" target="_blank">Jr Busaco</a></p>
+    </footer>
+
+    <script>
+        document.getElementById('testApi').addEventListener('click', async () => {
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const hugotLine = document.getElementById('hugotLine');
+
+            loading.classList.remove('hidden');
+            result.classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/hugot');
+                const data = await response.json();
+                
+                hugotLine.textContent = data.hugot;
+                result.classList.remove('hidden');
+            } catch (error) {
+                hugotLine.textContent = 'Error fetching hugot line. Please try again.';
+                result.classList.remove('hidden');
+            } finally {
+                loading.classList.add('hidden');
+            }
+        });
+
+        function copyToClipboard() {
+            const text = document.getElementById('hugotLine').textContent;
+            navigator.clipboard.writeText(text);
+            
+            const tooltip = document.querySelector('.tooltip');
+            tooltip.textContent = 'Copied!';
+            setTimeout(() => {
+                tooltip.textContent = 'Copy';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
+
+
+
+
